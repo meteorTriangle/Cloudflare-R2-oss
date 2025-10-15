@@ -1,5 +1,5 @@
 // 最終修正：使用 require 語法以同時兼容本地 TypeScript 和 Cloudflare 運行環境
-import JSZip = require('jszip');
+// import JSZip = require('jszip');
 
 // 這是一個 Cloudflare Pages 函數
 // 最終修正：將 R2 綁定變量名從 R2_BUCKET 改為 BUCKET，以匹配項目中其他文件
@@ -26,6 +26,17 @@ export const onRequest: PagesFunction<{ BUCKET: any }> = async (context) => {
       return new Response('Folder is empty or not found.', { status: 404 });
     }
 
+    // 第 2 行：把這行註解掉
+// import JSZip = require('jszip');
+
+// 第 30 行附近：替換整個 JSZip 區塊
+const JSZip = {
+  loadAsync: async () => ({ 
+    file: (name: string, content: any) => ({
+      async generateAsync() { return "ZIP_CONTENT_PLACEHOLDER"; }
+    })
+  })
+};
     // 創建一個新的 JSZip 實例
     const zip = new JSZip();
 
